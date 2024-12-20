@@ -1,0 +1,16 @@
+# Dependencias de Node.js
+node_modules/
+
+# Variables de entorno
+.env
+
+# Carpeta de build
+dist/
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Configuraciones de editores
+.vscode/
+.idea/
