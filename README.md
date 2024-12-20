@@ -11,8 +11,10 @@ Eliminar eventos: Eliminar eventos existentes con confirmación.
 
 
 LOGIN: 
-usuario: admin10
-Contraseña: 12345
+
+--usuario: admin10 
+
+--Contraseña: 12345
 
 
 El frontend está conectado a una API REST desplegada en Vercel, que realiza las operaciones CRUD sobre los eventos.
