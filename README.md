@@ -1,12 +1,20 @@
 Gestión de Eventos - React Frontend
      Descripción del Proyecto
 Este es un proyecto de gestión de eventos desarrollado en React utilizando Vite como herramienta de desarrollo. Permite a los usuarios:
-
 Crear eventos: Añadir nuevos eventos proporcionando detalles como título, descripción, ubicación, fecha, hora, y más.
-Editar eventos: Modificar la información de eventos existentes.
 Listar eventos: Ver una tabla con los eventos creados, incluyendo detalles del organizador.
-Eliminar eventos: Eliminar eventos existentes con confirmación.
 Filtrar eventos por nombre y titulo.
+
+Si entramos en modo ADMINISTRADOR podemos:
+Editar eventos: Modificar la información de eventos existentes.
+Eliminar eventos: Eliminar eventos existentes con confirmación.
+
+
+LOGIN: 
+usuario: admin10
+Contraseña: 12345
+
+
 El frontend está conectado a una API REST desplegada en Vercel, que realiza las operaciones CRUD sobre los eventos.
 
 Características principales
