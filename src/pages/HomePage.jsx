@@ -22,29 +22,31 @@ import {
   FormControl,
   MenuItem,
   Select,
+  Grid,
+  InputAdornment,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; // Importar contexto de autenticación
+import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import SearchIcon from "@mui/icons-material/Search";
 
 const HomePage = () => {
   const { isAuthenticated, logout } = useAuth(); // Usar contexto de autenticación
-  const [events, setEvents] = useState([]); // Almacena todos los eventos
-  const [expandedRows, setExpandedRows] = useState({}); // Almacena el estado de los detalles desplegados
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false); // Controla el diálogo de eliminación
-  const [eventToDelete, setEventToDelete] = useState(null); // ID del evento a eliminar
-  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false); // Controla el diálogo de cierre de sesión
-  const [searchTerm, setSearchTerm] = useState(""); // Almacena el término de búsqueda
-  const [filterOption, setFilterOption] = useState("nombre"); // Almacena la opción de filtro seleccionada
-  const navigate = useNavigate(); // Navegación entre páginas
+  const [events, setEvents] = useState([]);
+  const [expandedRows, setExpandedRows] = useState({});
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [eventToDelete, setEventToDelete] = useState(null);
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterOption, setFilterOption] = useState("nombre");
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = "Agenda de Eventos";
   }, []);
-  
-  // Cargar eventos desde la API
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -60,13 +62,11 @@ const HomePage = () => {
     fetchEvents();
   }, []);
 
-  // Función para filtrar los eventos
   const handleFilter = async () => {
     try {
       let url =
         "https://api-crud-mongoatlas.vercel.app/api/eventos/negocio/busqueda";
 
-      // Construir la URL según la opción de filtro seleccionada
       if (filterOption === "nombre") {
         url += `?nombre=${searchTerm}`;
       } else if (filterOption === "titulo") {
@@ -75,16 +75,14 @@ const HomePage = () => {
         url += `?nombre=${searchTerm}&titulo=${searchTerm}`;
       }
 
-      // Realizar la solicitud a la API
       const response = await axios.get(url);
-      setEvents(response.data); // Actualizar la lista de eventos con los resultados
+      setEvents(response.data);
     } catch (error) {
       console.error("Error al filtrar los eventos:", error);
-      setEvents([]); // Vaciar la lista si no hay resultados
+      setEvents([]);
     }
   };
 
-  // Manejar el despliegue de filas
   const handleToggleRow = async (eventId) => {
     setExpandedRows((prev) => ({
       ...prev,
@@ -109,13 +107,11 @@ const HomePage = () => {
     }
   };
 
-  // Manejar la apertura del diálogo de eliminación
   const handleOpenDeleteDialog = (eventId) => {
     setEventToDelete(eventId);
     setDeleteDialogOpen(true);
   };
 
-  // Manejar la confirmación de eliminación
   const handleDeleteEvent = async () => {
     try {
       await axios.delete(
@@ -131,62 +127,116 @@ const HomePage = () => {
 
   // Manejar la confirmación de cierre de sesión
   const handleLogoutConfirm = () => {
-    logout(); // Elimina los privilegios de administrador
+    logout(); // Llama al contexto para cerrar sesión
     setLogoutDialogOpen(false); // Cierra el diálogo
   };
 
   return (
     <Container maxWidth="lg" sx={{ padding: "20px" }}>
-      <Typography variant="h3" gutterBottom>
-        Bienvenido a la Agenda de Eventos
-      </Typography>
-      <Typography variant="body1" gutterBottom>
-        Organiza tus eventos de manera eficiente y accede a ellos fácilmente.
+      {/* Header */}
+      <Grid container justifyContent="space-between" alignItems="center" mb={3}>
+        <Grid item>
+          <Typography
+            variant="h3"
+            component="h1"
+            align="center"
+            gutterBottom
+            sx={{ fontWeight: "bold", color: "#1976d2" }}
+          >
+            Agenda de Eventos
+          </Typography>
+        </Grid>
+        <Grid item>
+          {isAuthenticated ? (
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={() => setLogoutDialogOpen(true)} // Abre el diálogo de confirmación
+            >
+              Cerrar Sesión
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              color="primary"
+              component={Link}
+              to="/login"
+            >
+              Iniciar Sesión
+            </Button>
+          )}
+        </Grid>
+      </Grid>
+
+      {/* Descripción */}
+      <Typography
+        variant="body1"
+        align="center"
+        gutterBottom
+        sx={{
+          marginBottom: "20px",
+          color: "#616161",
+          fontStyle: "italic",
+          padding: "10px",
+          backgroundColor: "#f5f5f5",
+          borderRadius: "5px",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        Organiza tus eventos de manera eficiente, visualiza detalles y realiza
+        cambios en tiempo real.
       </Typography>
 
-      {/* Botón para iniciar o cerrar sesión */}
-      {isAuthenticated ? (
-        <Button
-          variant="outlined"
-          color="secondary"
-          onClick={() => setLogoutDialogOpen(true)} // Abre el diálogo de cierre de sesión
-          sx={{ marginBottom: "20px", marginRight: "10px" }}
-        >
-          Cerrar Sesión
-        </Button>
-      ) : (
+      {/* Botón Crear Evento */}
+      <Box textAlign="center" mb={3}>
         <Button
           variant="contained"
           color="primary"
           component={Link}
-          to="/login"
-          sx={{ marginBottom: "20px", marginRight: "10px" }}
+          to="/crear-evento"
+          sx={{
+            padding: "10px 20px",
+            fontSize: "1.2rem",
+            fontWeight: "bold",
+            backgroundColor: "#1976d2",
+            ":hover": { backgroundColor: "#115293" },
+          }}
         >
-          Iniciar Sesión como Administrador
+          Crear Nuevo Evento
         </Button>
-      )}
+      </Box>
 
-      {/* Botón para crear un nuevo evento */}
-      <Button
-        variant="contained"
-        color="primary"
-        component={Link}
-        to="/crear-evento"
-        sx={{ marginBottom: "20px" }}
+      {/* Filtro */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          padding: "10px",
+          backgroundColor: "#f9f9f9",
+          borderRadius: "8px",
+          marginBottom: "20px",
+        }}
       >
-        Crear Nuevo Evento
-      </Button>
-
-      {/* Filtro de búsqueda */}
-      <Box sx={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
         <TextField
           label="Buscar eventos"
           variant="outlined"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          sx={{ flex: 1, marginRight: "10px" }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          sx={{
+            flex: 1,
+            backgroundColor: "white",
+            borderRadius: "5px",
+          }}
         />
-        <FormControl variant="outlined" sx={{ width: "200px", marginRight: "10px" }}>
+        <FormControl variant="outlined" sx={{ width: "200px" }}>
           <Select
             value={filterOption}
             onChange={(e) => setFilterOption(e.target.value)}
@@ -197,30 +247,52 @@ const HomePage = () => {
             <MenuItem value="ambos">Ambos</MenuItem>
           </Select>
         </FormControl>
-        <Button variant="contained" color="primary" onClick={handleFilter}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleFilter}
+          sx={{
+            backgroundColor: "#1976d2",
+            ":hover": { backgroundColor: "#115293" },
+          }}
+        >
           Filtrar
         </Button>
       </Box>
 
-      {/* Listado de eventos */}
-      <TableContainer component={Paper}>
+      {/* Listado de Eventos */}
+      <TableContainer
+        component={Paper}
+        sx={{
+          borderRadius: "8px",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+        }}
+      >
         <Table>
           <TableHead>
             <TableRow>
               <TableCell />
-              <TableCell>
-                <strong>Título del Evento</strong>
+              <TableCell
+                sx={{ fontWeight: "bold", color: "#424242", fontSize: "1.1rem" }}
+              >
+                Título del Evento
               </TableCell>
-              <TableCell>
-                <strong>Nombre del Organizador</strong>
+              <TableCell
+                sx={{ fontWeight: "bold", color: "#424242", fontSize: "1.1rem" }}
+              >
+                Nombre del Organizador
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {events.map((event) => (
+            {events.map((event, index) => (
               <React.Fragment key={event._id}>
-                {/* Fila principal */}
-                <TableRow>
+                <TableRow
+                  sx={{
+                    backgroundColor: index % 2 === 0 ? "#f9f9f9" : "white",
+                    ":hover": { backgroundColor: "#e0f7fa" },
+                  }}
+                >
                   <TableCell>
                     <IconButton
                       size="small"
@@ -236,8 +308,6 @@ const HomePage = () => {
                   <TableCell>{event.titulo}</TableCell>
                   <TableCell>{event.organizador.nombre}</TableCell>
                 </TableRow>
-
-                {/* Fila desplegable */}
                 <TableRow>
                   <TableCell colSpan={3} sx={{ padding: 0 }}>
                     <Collapse
@@ -262,7 +332,7 @@ const HomePage = () => {
                         <Typography>
                           <strong>Tipo:</strong> {event.tipo}
                         </Typography>
-                        {isAuthenticated && ( // Condición para mostrar botones
+                        {isAuthenticated && (
                           <Box sx={{ mt: 2 }}>
                             <Button
                               variant="outlined"

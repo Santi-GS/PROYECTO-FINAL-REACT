@@ -11,6 +11,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  CircularProgress,
+  Paper,
 } from "@mui/material";
 import axios from "axios";
 
@@ -127,131 +129,157 @@ const EventFormPage = () => {
 
   return (
     <Container maxWidth="md" sx={{ padding: "20px" }}>
-      <Typography variant="h4" gutterBottom>
-        {id ? "Editar Evento" : "Crear Nuevo Evento"}
-      </Typography>
-
-      {/* Botón para volver a la página principal */}
-      <Button
-        variant="outlined"
-        color="secondary"
-        sx={{ mb: 2 }}
-        onClick={handleBackNavigation}
-      >
-        Volver a la Página Principal
-      </Button>
-
-      {loading ? (
-        <Typography>Cargando datos del evento...</Typography>
-      ) : (
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
-          <TextField
-            label="Título"
-            name="titulo"
-            value={formData.titulo}
-            onChange={handleInputChange}
-            fullWidth
-            required
-            margin="normal"
-          />
-          <TextField
-            label="Descripción"
-            name="descripcion"
-            value={formData.descripcion}
-            onChange={handleInputChange}
-            fullWidth
-            required
-            margin="normal"
-          />
-          <TextField
-            label="Ubicación"
-            name="ubicacion"
-            value={formData.ubicacion}
-            onChange={handleInputChange}
-            fullWidth
-            required
-            margin="normal"
-          />
-          <TextField
-            label="Fecha"
-            name="fecha"
-            type="date"
-            value={formData.fecha}
-            onChange={handleInputChange}
-            fullWidth
-            required
-            margin="normal"
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-          <TextField
-            label="Hora"
-            name="hora"
-            type="time"
-            value={formData.hora}
-            onChange={handleInputChange}
-            fullWidth
-            required
-            margin="normal"
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-          <TextField
-            label="Tipo"
-            name="tipo"
-            value={formData.tipo}
-            onChange={handleInputChange}
-            fullWidth
-            required
-            margin="normal"
-          />
-          <Typography variant="h6" sx={{ mt: 2 }}>
-            Información del Organizador
+      <Paper elevation={3} sx={{ padding: 4, borderRadius: 3 }}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+          <Typography
+            variant="h4"
+            component="h1"
+            sx={{ fontWeight: "bold", color: "#1976d2" }}
+          >
+            {id ? "Editar Evento" : "Crear Nuevo Evento"}
           </Typography>
-          <TextField
-            label="Nombre del Organizador"
-            name="organizador.nombre"
-            value={formData.organizador.nombre}
-            onChange={handleInputChange}
-            fullWidth
-            required
-            margin="normal"
-          />
-          <TextField
-            label="Correo del Organizador"
-            name="organizador.correo"
-            value={formData.organizador.correo}
-            onChange={handleInputChange}
-            fullWidth
-            required
-            margin="normal"
-          />
-          <TextField
-            label="Teléfono del Organizador"
-            name="organizador.telefono"
-            value={formData.organizador.telefono}
-            onChange={handleInputChange}
-            fullWidth
-            required
-            margin="normal"
-          />
-          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
-            <Button type="submit" variant="contained" color="primary">
-              {id ? "Editar Evento" : "Crear Evento"}
-            </Button>
-          </Box>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={handleBackNavigation}
+          >
+            Volver
+          </Button>
         </Box>
-      )}
 
-      {error && <Typography color="error">{error}</Typography>}
+        {loading ? (
+          <Box textAlign="center" mt={3}>
+            <CircularProgress />
+            <Typography mt={2}>Cargando datos del evento...</Typography>
+          </Box>
+        ) : (
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ mt: 3 }}
+          >
+            <TextField
+              label="Título"
+              name="titulo"
+              value={formData.titulo}
+              onChange={handleInputChange}
+              fullWidth
+              required
+              margin="normal"
+            />
+            <TextField
+              label="Descripción"
+              name="descripcion"
+              value={formData.descripcion}
+              onChange={handleInputChange}
+              fullWidth
+              required
+              margin="normal"
+              multiline
+              rows={3}
+            />
+            <TextField
+              label="Ubicación"
+              name="ubicacion"
+              value={formData.ubicacion}
+              onChange={handleInputChange}
+              fullWidth
+              required
+              margin="normal"
+            />
+            <Box display="flex" gap={2}>
+              <TextField
+                label="Fecha"
+                name="fecha"
+                type="date"
+                value={formData.fecha}
+                onChange={handleInputChange}
+                fullWidth
+                required
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+              <TextField
+                label="Hora"
+                name="hora"
+                type="time"
+                value={formData.hora}
+                onChange={handleInputChange}
+                fullWidth
+                required
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Box>
+            <TextField
+              label="Tipo"
+              name="tipo"
+              value={formData.tipo}
+              onChange={handleInputChange}
+              fullWidth
+              required
+              margin="normal"
+            />
+            <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
+              Información del Organizador
+            </Typography>
+            <TextField
+              label="Nombre del Organizador"
+              name="organizador.nombre"
+              value={formData.organizador.nombre}
+              onChange={handleInputChange}
+              fullWidth
+              required
+              margin="normal"
+            />
+            <TextField
+              label="Correo del Organizador"
+              name="organizador.correo"
+              value={formData.organizador.correo}
+              onChange={handleInputChange}
+              fullWidth
+              required
+              margin="normal"
+            />
+            <TextField
+              label="Teléfono del Organizador"
+              name="organizador.telefono"
+              value={formData.organizador.telefono}
+              onChange={handleInputChange}
+              fullWidth
+              required
+              margin="normal"
+            />
+            <Box textAlign="right" mt={3}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                sx={{
+                  padding: "10px 20px",
+                  fontSize: "1.1rem",
+                  backgroundColor: "#1976d2",
+                  ":hover": { backgroundColor: "#115293" },
+                }}
+              >
+                {id ? "Guardar Cambios" : "Crear Evento"}
+              </Button>
+            </Box>
+          </Box>
+        )}
+
+        {error && (
+          <Typography color="error" mt={2}>
+            {error}
+          </Typography>
+        )}
+      </Paper>
 
       {/* Diálogo de confirmación */}
-      <Dialog
-        open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
-      >
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogTitle>Confirmación</DialogTitle>
         <DialogContent>
           <DialogContentText>
