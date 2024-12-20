@@ -29,6 +29,8 @@ LOGIN:
 
 El frontend está conectado a una API REST desplegada en Vercel, que realiza las operaciones CRUD sobre los eventos.
 
+https://github.com/Santi-GS/API-CRUD-mongoatlas.git
+
 Características principales
 
 Crear y editar eventos con formularios dinámicos y validaciones.
