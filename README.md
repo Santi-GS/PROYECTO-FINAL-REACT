@@ -87,4 +87,12 @@ npm run dev
 
 Esto iniciará la aplicación en modo desarrollo. Abre tu navegador y navega a http://localhost:5173.
 
+![image](https://github.com/user-attachments/assets/b7b9e048-76bf-430f-91df-20b7de93fddc)
+
+![image](https://github.com/user-attachments/assets/47895e0e-70bb-4844-af59-a6c71caa4323)
+
+![image](https://github.com/user-attachments/assets/3f84d4c0-da9c-456d-95ae-82e23f13d464)
+
+
+
    
