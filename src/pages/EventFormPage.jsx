@@ -68,6 +68,21 @@ const EventFormPage = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
+    // Definir límites personalizado de caracteres
+  const limits = {
+    titulo: 100,
+    descripcion: 300,
+    ubicacion: 150,
+    tipo: 50,
+    "organizador.nombre": 80,
+    "organizador.correo": 80,
+    "organizador.telefono": 15,
+  };
+
+  if (value.length > (limits[name] || Infinity)) {
+    return; // Ignorar si se supera el límite
+  }
+
     if (name.includes("organizador.")) {
       const key = name.split(".")[1];
       setFormData((prev) => ({
